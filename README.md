@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Amawal — Dictionnaire kabyle
 
-## Getting Started
+Dictionnaire en ligne de la langue kabyle : recherche publique, fiches de mots,
+page de connexion et backoffice d'administration.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, Server Actions, TypeScript)
+- **MongoDB** + Mongoose
+- **Tailwind CSS 4**
+- Auth par session JWT (jose) en cookie `httpOnly` + rôles (`admin` / `user`)
+- Validation des formulaires avec Zod
+
+## Fonctionnalités
+
+| Route | Description |
+|---|---|
+| `/` | Dictionnaire public : recherche (mot, définition, traductions), filtre par lettre |
+| `/mot/[id]` | Fiche détaillée : définition, traductions (fr/ar/en), exemples |
+| `/login` | Connexion administrateur |
+| `/admin` | Backoffice : liste des mots, modification, suppression |
+| `/admin/nouveau` | Ajout d'un mot |
+| `/api/mots`, `/api/mots/[id]` | API publique de lecture |
+
+Le dossier `src/proxy.ts` protège `/admin` (redirection vers `/login` si non
+connecté) — dans Next.js 16, *Middleware* s'appelle **Proxy**.
+
+## Démarrage local
 
 ```bash
+npm install
+
+# Base de données (Docker)
+docker compose up -d
+
+# Configuration
+cp .env.example .env.local
+# → remplir MONGODB_URI, SESSION_SECRET (openssl rand -base64 32),
+#   ADMIN_USERNAME, ADMIN_PASSWORD
+
+# Compte admin + mots d'exemple
+npm run seed
+
+# Développement
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Compte admin par défaut du seed : `admin` / valeur de `ADMIN_PASSWORD`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Déploiement gratuit
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Base de données — MongoDB Atlas (gratuit)
 
-## Learn More
+1. Créer un compte sur [mongodb.com/atlas](https://www.mongodb.com/atlas) (plan M0, 512 Mo)
+2. Créer un cluster → *Database Access* : utilisateur + mot de passe
+3. *Network Access* : autoriser `0.0.0.0/0` (ou l'IP de Vercel)
+4. *Connect → Drivers* : copier l'URI `mongodb+srv://…` dans `MONGODB_URI`
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Application — Vercel (gratuit)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm i -g vercel
+vercel link
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Puis sur [vercel.com](https://vercel.com) : *Import Git Repository*, ou via CLI :
 
-## Deploy on Vercel
+```bash
+vercel --prod
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Variables d'environnement à définir (Settings → Environment Variables) :
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `MONGODB_URI`
+- `SESSION_SECRET`
+- `ADMIN_USERNAME` / `ADMIN_PASSWORD` (uniquement si tu relances `npm run seed` en local)
+
+## Scripts
+
+| Commande | Rôle |
+|---|---|
+| `npm run dev` | Serveur de développement |
+| `npm run build` | Build de production |
+| `npm run lint` | ESLint |
+| `npm run seed` | Crée l'admin + mots d'exemple (idempotent) |
+
+## Architecture
+
+```
+src/
+├── proxy.ts                  # garde d'accès /admin (ex-middleware)
+├── lib/
+│   ├── db.ts                 # connexion Mongoose (singleton)
+│   ├── session.ts            # JWT jose, cookies httpOnly
+│   ├── dal.ts                # verifySession / requireAdmin (vérif. en base)
+│   ├── categories.ts         # constantes partagées client/serveur
+│   ├── words.ts              # requêtes lecture → DTO
+│   ├── models/               # schémas Mongoose (User, Word)
+│   └── actions/              # Server Actions (auth, CRUD mots)
+├── components/               # header, formulaires (client)
+└── app/
+    ├── page.tsx              # dictionnaire public
+    ├── mot/[id]/             # fiche mot
+    ├── login/                # connexion
+    ├── admin/                # backoffice (protégé)
+    └── api/mots/             # API publique
+```
+
+## Sécurité
+
+- Cookie de session `httpOnly` + `SameSite=Lax`, signé HS256 (7 jours)
+- Proxy = check optimiste ; `requireAdmin()` revérifie en base avant chaque écriture
+- Mots de passe hachés avec bcrypt, validation Zod côté serveur
+- Requêtes API de lecture uniquement ; écritures réservées aux server actions admin
