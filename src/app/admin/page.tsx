@@ -57,7 +57,7 @@ export default async function AdminPage() {
         </div>
       ) : (
         <>
-          {/* Desktop : tableau */}
+          {/* Desktop */}
           <div className="card animate-fade-up hidden overflow-x-auto md:block">
             <table className="w-full text-left text-sm">
               <thead>
