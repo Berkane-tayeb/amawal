@@ -11,7 +11,7 @@ const SAMPLE_WORDS = [
     category: "nom",
     definition:
       "Ameksum n tegesti d uḍris i ibanen ɣer tuddart neɣ ɣer tagaddagt n tigawt.",
-    translations: { fr: "mur, rempart", ar: "سور", en: "wall, rampart" },
+    translations: { fr: "mur, rempart", ar: "سور" },
     examples: ["Agadir n taddart yeṭṭebbin tirga."],
   },
   {
@@ -20,7 +20,7 @@ const SAMPLE_WORDS = [
     transcription: "ⴰⵣⵓⵍ",
     category: "expression",
     definition: "Awal n tisra i yettwaqbaylen deg tulawin.",
-    translations: { fr: "salut, bonjour", ar: "مرحبًا", en: "hello, hi" },
+    translations: { fr: "salut, bonjour", ar: "مرحبًا" },
     examples: ["Azul fell-kem !"],
   },
   {
@@ -30,7 +30,7 @@ const SAMPLE_WORDS = [
     category: "nom",
     definition:
       "Tigawt neɣ agru n tegesti yellan di wadda n yimḍan.",
-    translations: { fr: "village, hameau", ar: "قرية", en: "village" },
+    translations: { fr: "village, hameau", ar: "قرية" },
     examples: ["Taddart-nsin tella d lawya ɣer temdint."],
   },
   {
@@ -40,7 +40,7 @@ const SAMPLE_WORDS = [
     category: "nom",
     definition:
       "Agbur n wawalen n yiwenniyan i d-yettwaskedden ɣer tira neɣ ɣer tawalint.",
-    translations: { fr: "dictionnaire, lexique", ar: "قاموس", en: "dictionary" },
+    translations: { fr: "dictionnaire, lexique", ar: "قاموس" },
     examples: ["Amawal-agi yegd asqim n taqbaylit."],
   },
   {
@@ -49,7 +49,7 @@ const SAMPLE_WORDS = [
     transcription: "ⵉⵙⵙⴰ",
     category: "verbe",
     definition: "S-wali timeẓẓuɣin n uẓru, ma d tagi n tira.",
-    translations: { fr: "vouloir, désirer", ar: "يريد", en: "to want" },
+    translations: { fr: "vouloir, désirer", ar: "يريد" },
     examples: ["Issaɣ ad d-ruḥeɣ ɣer taddart."],
   },
   {
@@ -58,7 +58,7 @@ const SAMPLE_WORDS = [
     transcription: "ⵥⵥⴻⵔ",
     category: "verbe",
     definition: "Hdu ɣer wayen i yellan s tezzwit n yebdan.",
-    translations: { fr: "voir, regarder", ar: "يُنظر، يرى", en: "to see, to look" },
+    translations: { fr: "voir, regarder", ar: "يُنظر، يرى" },
     examples: ["Ẓriɣ aṭṭas n yimiḍuren."],
   },
 ];
@@ -78,12 +78,17 @@ async function seed() {
     console.log(`Admin créé : ${username} / ${password} (à changer !)`);
   }
 
-  const count = await Word.countDocuments();
-  if (count > 0) {
-    console.log(`Le dictionnaire contient déjà ${count} mot(s), seed ignoré.`);
+  const existingWords = new Set(await Word.distinct("word"));
+  const missing = SAMPLE_WORDS.filter((w) => !existingWords.has(w.word));
+  if (missing.length === 0) {
+    console.log(`${SAMPLE_WORDS.length} mots d'exemple déjà présents.`);
   } else {
-    await Word.insertMany(SAMPLE_WORDS);
-    console.log(`${SAMPLE_WORDS.length} mots d'exemple insérés.`);
+    await Word.insertMany(missing);
+    console.log(
+      `${missing.length} mot(s) d'exemple manquant(s) inséré(s) : ${missing
+        .map((w) => w.word)
+        .join(", ")}`,
+    );
   }
 
   process.exit(0);

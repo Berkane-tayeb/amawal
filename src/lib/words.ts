@@ -10,15 +10,16 @@ export type WordDTO = {
   phonetic: string;
   category: string;
   definition: string;
-  translations: { fr: string; ar: string; en: string };
+  syntax: string;
+  translations: { fr: string; ar: string };
   examples: string[];
   createdAt?: Date;
 };
 
 export const ALPHABET = [
-  "A", "B", "C", "Č", "D", "Ḍ", "E", "Ɛ", "F", "G", "Ɣ", "H", "I",
-  "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "Š", "T", "Ṭ",
-  "U", "V", "W", "X", "Y", "Z",
+  "A", "B", "C", "D", "Ḍ", "E", "F", "G", "Ǧ", "H", "Ḥ", "I", "J", "K",
+  "L", "M", "N", "Ɣ", "Q", "R", "Ṛ", "S", "Ṣ", "T", "Ṭ", "U", "W", "X",
+  "Y", "Z", "Ẓ", "Ɛ",
 ];
 
 function escapeRegex(value: string) {
@@ -33,10 +34,10 @@ export function toDTO(doc: WordDoc): WordDTO {
     phonetic: doc.phonetic ?? "",
     category: doc.category ?? "autre",
     definition: doc.definition,
+    syntax: doc.syntax ?? "",
     translations: {
       fr: doc.translations?.fr ?? "",
       ar: doc.translations?.ar ?? "",
-      en: doc.translations?.en ?? "",
     },
     examples: doc.examples ?? [],
     createdAt: doc.createdAt,
@@ -55,10 +56,10 @@ export async function searchWords(params: { q?: string; letter?: string }) {
     filter.$or = [
       { word: rx },
       { definition: rx },
+      { syntax: rx },
       { phonetic: rx },
       { "translations.fr": rx },
       { "translations.ar": rx },
-      { "translations.en": rx },
     ];
   } else if (letter) {
     filter.word = new RegExp(`^${escapeRegex(letter)}`, "i");

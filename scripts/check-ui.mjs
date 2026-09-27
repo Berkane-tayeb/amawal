@@ -1,14 +1,26 @@
 import { chromium } from "playwright";
+import { readFileSync } from "node:fs";
+
+function envLocal(key, fallback) {
+  try {
+    const txt = readFileSync(new URL("../.env.local", import.meta.url), "utf8");
+    const m = txt.match(new RegExp(`^${key}=(.*)$`, "m"));
+    if (m) return m[1].trim();
+  } catch {}
+  return fallback;
+}
 
 const browser = await chromium.launch();
 const ctx = await browser.newContext();
 const page = await ctx.newPage();
 
+let expected404 = false;
 const errors = [];
 page.on("console", (msg) => {
   if (msg.type() !== "error") return;
   const text = msg.text();
   if (text.includes("Download the React DevTools")) return;
+  if (expected404 && text.includes("404")) return;
   errors.push(text.slice(0, 3000));
 });
 page.on("pageerror", (err) => errors.push(`[pageerror] ${err.message}`));
@@ -18,15 +30,21 @@ async function go(url) {
   await page.waitForTimeout(400);
 }
 
+const api = await (await fetch("http://localhost:3000/api/mots")).json();
+const wordId = api.words?.[0]?.id;
+
 // Chargements initiaux
-for (const p of ["/", "/login", "/?q=azul", "/?letter=A", "/mot/6ab6a67257f9cb71821d6c2a", "/mot/inexistant"]) {
+for (const p of ["/", "/login", "/?q=azul", "/?letter=A", `/mot/${wordId}`]) {
   await go(p);
 }
+expected404 = true;
+await go("/mot/inexistant");
+expected404 = false;
 
 // Login via l'interface
 await go("/login");
-await page.fill("#username", "admin");
-await page.fill("#password", "Admin123!");
+await page.fill("#username", envLocal("ADMIN_USERNAME", "admin"));
+await page.fill("#password", envLocal("ADMIN_PASSWORD", "Admin123!"));
 await page.click('button[type="submit"]');
 await page.waitForURL("**/admin", { timeout: 10000 }).catch(() => {});
 
@@ -47,7 +65,7 @@ await page.waitForTimeout(600);
 const card = page.locator('a[href^="/mot/"]').first();
 await card.click();
 await page.waitForTimeout(600);
-const speak = page.locator('button[aria-label^="Écouter"]').first();
+const speak = page.locator('button[aria-label^="Ssel"]').first();
 if (await speak.count()) {
   await speak.click();
   await page.waitForTimeout(600);

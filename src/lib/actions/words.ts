@@ -14,9 +14,9 @@ const WordSchema = z.object({
   phonetic: z.string().trim().max(100).optional(),
   category: z.enum(CATEGORIES),
   definition: z.string().trim().min(1, "La définition est requise").max(2000),
+  syntax: z.string().trim().max(2000).optional(),
   fr: z.string().trim().max(500).optional(),
   ar: z.string().trim().max(500).optional(),
-  en: z.string().trim().max(500).optional(),
   examples: z.string().optional(),
 });
 
@@ -32,9 +32,9 @@ function parseForm(formData: FormData) {
     phonetic: formData.get("phonetic") || undefined,
     category: formData.get("category"),
     definition: formData.get("definition"),
+    syntax: formData.get("syntax") || undefined,
     fr: formData.get("fr") || undefined,
     ar: formData.get("ar") || undefined,
-    en: formData.get("en") || undefined,
     examples: formData.get("examples") || undefined,
   });
 }
@@ -46,7 +46,8 @@ function toDoc(data: z.infer<typeof WordSchema>) {
     phonetic: data.phonetic || "",
     category: data.category,
     definition: data.definition,
-    translations: { fr: data.fr || "", ar: data.ar || "", en: data.en || "" },
+    syntax: data.syntax || "",
+    translations: { fr: data.fr || "", ar: data.ar || "" },
     examples: (data.examples || "")
       .split("\n")
       .map((line) => line.trim())

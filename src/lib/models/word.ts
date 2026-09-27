@@ -10,10 +10,10 @@ const WordSchema = new Schema(
     phonetic: { type: String, trim: true },
     category: { type: String, enum: CATEGORIES, default: "autre" },
     definition: { type: String, required: true, trim: true },
+    syntax: { type: String, trim: true },
     translations: {
       fr: { type: String, trim: true },
       ar: { type: String, trim: true },
-      en: { type: String, trim: true },
     },
     examples: [{ type: String, trim: true }],
   },

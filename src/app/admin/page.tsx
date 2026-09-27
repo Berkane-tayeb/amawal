@@ -64,8 +64,8 @@ export default async function AdminPage() {
                 <tr className="border-b border-zinc-200 bg-zinc-50/80 text-[0.7rem] font-bold uppercase tracking-[0.12em] text-zinc-400">
                   <th className="px-5 py-3.5">Mot</th>
                   <th className="px-5 py-3.5">Catégorie</th>
-                  <th className="px-5 py-3.5">Définition</th>
-                  <th className="px-5 py-3.5">Français</th>
+                  <th className="px-5 py-3.5">tabadut</th>
+                  <th className="px-5 py-3.5">s tefransist</th>
                   <th className="px-5 py-3.5 text-right">Actions</th>
                 </tr>
               </thead>

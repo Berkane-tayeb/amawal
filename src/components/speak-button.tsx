@@ -82,8 +82,8 @@ export function SpeakButton({ text, variant = "icon", className }: Props) {
       <button
         type="button"
         onClick={speak}
-        aria-label={`Écouter la prononciation de « ${text} »`}
-        title="Écouter"
+        aria-label={`Ssel i tmeslayt de « ${text} »`}
+        title="Ssel i tmeslayt"
         className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-500 shadow-sm transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 active:scale-95 ${
           className ?? ""
         }`}
@@ -100,7 +100,7 @@ export function SpeakButton({ text, variant = "icon", className }: Props) {
       className={`btn-primary px-4 py-2.5 ${speaking ? "opacity-80" : ""} ${className ?? ""}`}
     >
       {icon}
-      {speaking ? "Lecture…" : "Écouter la prononciation"}
+      {speaking ? "Lecture…" : "Ssel i tmeslayt"}
     </button>
   );
 }

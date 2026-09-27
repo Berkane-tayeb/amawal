@@ -14,10 +14,10 @@ export async function SiteHeader() {
           </span>
           <span className="flex flex-col leading-tight">
             <span className="text-lg font-extrabold tracking-tight text-zinc-900 group-hover:text-brand-700">
-              Amawal
+              Amawal aɣurbiz
             </span>
             <span className="hidden font-mono text-[0.68rem] text-brand-600/80 sm:block">
-              ⴰⵎⴰⵡⴰⵍ
+              ⴰⵎⴰⵡⴰⵍ ⴰⵖⵓⵔⴱⵉⵣ
             </span>
           </span>
         </Link>
@@ -27,7 +27,7 @@ export async function SiteHeader() {
             href="/"
             className="hidden rounded-full px-3.5 py-2 font-medium text-zinc-600 transition hover:bg-brand-50 hover:text-brand-700 sm:inline-block"
           >
-            Dictionnaire
+            Amawal
           </Link>
 
           {user?.role === "admin" ? (
@@ -36,8 +36,8 @@ export async function SiteHeader() {
                 href="/admin"
                 className="rounded-full px-3 py-2 font-medium text-zinc-600 transition hover:bg-brand-50 hover:text-brand-700"
               >
-                <span className="hidden sm:inline">Backoffice</span>
-                <span className="sm:hidden">Admin</span>
+                <span className="hidden sm:inline">asefrek</span>
+                <span className="sm:hidden">asefrek</span>
               </Link>
               <form action={logout}>
                 <button

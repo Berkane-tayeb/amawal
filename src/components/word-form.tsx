@@ -46,7 +46,7 @@ export function WordForm({ mode, wordId, initial }: Props) {
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="word" className="label">
-              Mot (kabyle) <span className="text-red-500">*</span>
+              Mot (tamazight) <span className="text-red-500">*</span>
             </label>
             <input
               id="word"
@@ -109,10 +109,10 @@ export function WordForm({ mode, wordId, initial }: Props) {
       </section>
 
       <section>
-        <SectionTitle>Définition</SectionTitle>
+        <SectionTitle>tabadut</SectionTitle>
         <div>
           <label htmlFor="definition" className="label">
-            Définition en kabyle <span className="text-red-500">*</span>
+            tabadut s tamaziɣt <span className="text-red-500">*</span>
           </label>
           <textarea
             id="definition"
@@ -120,7 +120,7 @@ export function WordForm({ mode, wordId, initial }: Props) {
             required
             rows={4}
             defaultValue={initial?.definition ?? ""}
-            placeholder="Définition du mot…"
+            placeholder="tabadut n umut…"
             className="input mt-1.5 resize-y"
           />
           <FieldError state={state} field="definition" />
@@ -128,11 +128,29 @@ export function WordForm({ mode, wordId, initial }: Props) {
       </section>
 
       <section>
-        <SectionTitle>Traductions</SectionTitle>
-        <div className="grid gap-5 sm:grid-cols-3">
+        <SectionTitle>taseddast</SectionTitle>
+        <div>
+          <label htmlFor="syntax" className="label">
+            taseddast (syntaxe / construction)
+          </label>
+          <textarea
+            id="syntax"
+            name="syntax"
+            rows={3}
+            defaultValue={initial?.syntax ?? ""}
+            placeholder="Construction, place dans la phrase…"
+            className="input mt-1.5 resize-y"
+          />
+          <FieldError state={state} field="syntax" />
+        </div>
+      </section>
+
+      <section>
+        <SectionTitle>Agdazal</SectionTitle>
+        <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="fr" className="label">
-              Français
+              s tefransist
             </label>
             <input
               id="fr"
@@ -145,7 +163,7 @@ export function WordForm({ mode, wordId, initial }: Props) {
           </div>
           <div>
             <label htmlFor="ar" className="label">
-              العربية
+              s ta3rabt
             </label>
             <input
               id="ar"
@@ -157,27 +175,14 @@ export function WordForm({ mode, wordId, initial }: Props) {
             />
             <FieldError state={state} field="ar" />
           </div>
-          <div>
-            <label htmlFor="en" className="label">
-              English
-            </label>
-            <input
-              id="en"
-              name="en"
-              defaultValue={initial?.translations.en ?? ""}
-              placeholder="wall"
-              className="input mt-1.5"
-            />
-            <FieldError state={state} field="en" />
-          </div>
         </div>
       </section>
 
       <section>
-        <SectionTitle>Exemples</SectionTitle>
+        <SectionTitle>amedya</SectionTitle>
         <div>
           <label htmlFor="examples" className="label">
-            Un exemple par ligne
+            Un amedya par ligne
           </label>
           <textarea
             id="examples"

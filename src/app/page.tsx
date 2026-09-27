@@ -15,22 +15,27 @@ function WordCard({ entry, index }: { entry: WordDTO; index: number }) {
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="text-xl font-extrabold tracking-tight text-zinc-900">
+          <h3 className="flex flex-wrap items-baseline gap-x-2 text-xl font-extrabold tracking-tight text-zinc-900">
             <Link
               href={`/mot/${entry.id}`}
               className="transition after:absolute after:inset-0 group-hover:text-brand-700"
             >
               {entry.word}
             </Link>
+            {entry.phonetic && (
+              <span className="font-mono text-xs font-normal text-zinc-400">
+                {entry.phonetic}
+              </span>
+            )}
           </h3>
-          {entry.phonetic && (
-            <p className="mt-0.5 font-mono text-xs text-zinc-400">
-              {entry.phonetic}
-            </p>
-          )}
           {entry.transcription && (
             <p className="mt-0.5 font-mono text-sm text-brand-600">
               {entry.transcription}
+            </p>
+          )}
+          {entry.syntax && (
+            <p className="mt-1 line-clamp-2 text-sm text-zinc-500">
+              {entry.syntax}
             </p>
           )}
         </div>
@@ -48,7 +53,7 @@ function WordCard({ entry, index }: { entry: WordDTO; index: number }) {
       {entry.translations.fr && (
         <p className="mt-3 flex items-center gap-2 text-sm text-zinc-500">
           <span className="rounded-md bg-amber-50 px-1.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-amber-700 ring-1 ring-amber-200">
-            fr
+            s tefransist
           </span>
           <span className="truncate italic">{entry.translations.fr}</span>
         </p>
@@ -83,19 +88,21 @@ export default async function HomePage(props: PageProps<"/">) {
 
         <div className="relative">
           <span className="pill border-brand-200 bg-brand-50 text-brand-700">
-            Dictionnaire kabyle
+            Dictionnaire tamazight – tamazight
           </span>
 
           <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl">
-            Amawal{" "}
+            Amawal aɣurbiz{" "}
             <span className="bg-gradient-to-r from-brand-600 to-sky-500 bg-clip-text font-mono text-transparent">
-              ⴰⵎⴰⵡⴰⵍ
+              ⴰⵎⴰⵡⴰⵍ ⴰⵖⵓⵔⴱⵉⵣ
             </span>
           </h1>
           <p className="mt-3 max-w-xl text-zinc-600">
-            Explore la langue kabyle : définitions, traductions et exemples,
-            <span className="font-semibold text-brand-700"> {total} mots</span>{" "}
-            et plus à découvrir.
+            Snumel tutlayt tamaziɣt : tibadutin, tisqimin d yimedyaten,{" "}
+            <span className="font-semibold text-brand-700">
+              {total} n wawalen
+            </span>{" "}
+            d ugar ara tafeḍ.
           </p>
 
           <form
@@ -121,12 +128,12 @@ export default async function HomePage(props: PageProps<"/">) {
                 type="search"
                 name="q"
                 defaultValue={q}
-                placeholder="Rechercher un mot, une définition, une traduction…"
+                placeholder="Nadi awal …"
                 className="input py-3 pl-12 shadow-lg shadow-zinc-900/5"
               />
             </div>
             <button type="submit" className="btn-primary px-6 py-3">
-              Chercher
+              Nadi
             </button>
           </form>
 
@@ -168,7 +175,7 @@ export default async function HomePage(props: PageProps<"/">) {
               ? `Résultats pour « ${q} »`
               : letter
                 ? `Mots commençant par « ${letter} »`
-                : "Tous les mots"}
+                : "Akk wawalen"}
           </h2>
           <span className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-zinc-500 ring-1 ring-zinc-200">
             {entries.length}

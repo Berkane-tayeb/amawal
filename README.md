@@ -1,7 +1,8 @@
-# Amawal — Dictionnaire kabyle
+# Amawal aɣurbiz — Dictionnaire tamazight
 
-Dictionnaire en ligne de la langue kabyle : recherche publique, fiches de mots,
-page de connexion et backoffice d'administration.
+Dictionnaire tamazight–tamazight (tabadut, taseddast, agdazal, amedya) :
+recherche publique, fiches de mots, page de connexion et backoffice
+d'administration.
 
 ## Stack
 
@@ -83,6 +84,19 @@ Variables d'environnement à définir (Settings → Environment Variables) :
 | `npm run build` | Build de production |
 | `npm run lint` | ESLint |
 | `npm run seed` | Crée l'admin + mots d'exemple (idempotent) |
+
+## Seeder la base de production (Atlas)
+
+Le seed s'exécute contre la base de `MONGODB_URI`. Pour peupler Atlas
+(compte admin + mots d'exemple), lance :
+
+```bash
+MONGODB_URI="mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net/amawal" npm run seed
+```
+
+Les identifiants admin créés viennent de `ADMIN_USERNAME` / `ADMIN_PASSWORD`
+dans ton `.env.local` (par défaut `admin` / `Admin123!` — à changer).
+À refaire aussi après avoir vidé la base de production.
 
 ## Architecture
 

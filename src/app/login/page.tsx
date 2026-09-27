@@ -28,7 +28,7 @@ export default async function LoginPage(props: PageProps<"/login">) {
           <h2 className="mt-6 text-2xl font-extrabold leading-snug">
             Espace d&apos;administration
             <span className="block font-mono text-base font-medium text-brand-100">
-              ⴰⵎⴰⵡⴰⵍ
+              ⴰⵎⴰⵡⴰⵍ ⴰⵖⵓⵔⴱⵉⵣ
             </span>
           </h2>
         </div>
@@ -40,7 +40,7 @@ export default async function LoginPage(props: PageProps<"/login">) {
           </li>
           <li className="flex items-center gap-3">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-300" />
-            Gérer les traductions et les exemples
+            Gérer tabadut, taseddast, agdazal et amedya
           </li>
           <li className="flex items-center gap-3">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-300" />
@@ -54,7 +54,7 @@ export default async function LoginPage(props: PageProps<"/login">) {
           Connexion
         </h1>
         <p className="mt-1 text-sm text-zinc-500">
-          Bienvenue sur le backoffice d&apos;Amawal.
+          Bienvenue sur le backoffice d&apos;Amawal aɣurbiz.
         </p>
         <div className="mt-5">
           <LoginForm next={next} />
