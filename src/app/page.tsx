@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { searchWords, countWords, ALPHABET, type WordDTO } from "@/lib/words";
+import { searchWords, countWords, type WordDTO } from "@/lib/words";
 import { categoryMeta } from "@/lib/category-meta";
 import { SpeakButton } from "@/components/speak-button";
+import { SearchBar } from "@/components/search-bar";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +47,7 @@ function WordCard({ entry, index }: { entry: WordDTO; index: number }) {
         </div>
       </div>
 
-      <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-zinc-600">
+      <p className="mt-3 line-clamp-2 whitespace-pre-line text-sm leading-relaxed text-zinc-600">
         {entry.definition}
       </p>
 
@@ -71,8 +72,6 @@ export default async function HomePage(props: PageProps<"/">) {
     searchWords({ q, letter }),
     countWords(),
   ]);
-
-  const hasFilter = Boolean(q || letter);
 
   return (
     <div className="space-y-10">
@@ -105,66 +104,7 @@ export default async function HomePage(props: PageProps<"/">) {
             d ugar ara tafeḍ.
           </p>
 
-          <form
-            method="GET"
-            action="/"
-            className="mt-7 flex max-w-2xl flex-col gap-2.5 sm:flex-row"
-          >
-            <div className="relative flex-1">
-              <svg
-                aria-hidden
-                viewBox="0 0 20 20"
-                fill="none"
-                className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-400"
-              >
-                <path
-                  d="m19 19-3.5-3.5m1.5-4.5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-              </svg>
-              <input
-                type="search"
-                name="q"
-                defaultValue={q}
-                placeholder="Nadi awal …"
-                className="input py-3 pl-12 shadow-lg shadow-zinc-900/5"
-              />
-            </div>
-            <button type="submit" className="btn-primary px-6 py-3">
-              Nadi
-            </button>
-          </form>
-
-          <nav className="mt-6 flex flex-wrap gap-1.5">
-            {ALPHABET.map((letterChar) => {
-              const active = letter === letterChar;
-              return (
-                <Link
-                  key={letterChar}
-                  href={
-                    active ? "/" : `/?letter=${encodeURIComponent(letterChar)}`
-                  }
-                  className={
-                    active
-                      ? "flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-b from-brand-500 to-brand-600 font-bold text-white shadow-md shadow-brand-600/30"
-                      : "flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 bg-white/80 font-semibold text-zinc-600 transition hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700"
-                  }
-                >
-                  {letterChar}
-                </Link>
-              );
-            })}
-            {hasFilter && (
-              <Link
-                href="/"
-                className="ml-1 flex h-9 items-center rounded-lg px-3 text-sm font-medium text-zinc-500 underline-offset-4 transition hover:text-brand-700 hover:underline"
-              >
-                Tout afficher ✕
-              </Link>
-            )}
-          </nav>
+          <SearchBar q={q} letter={letter} />
         </div>
       </section>
 

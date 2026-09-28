@@ -80,7 +80,7 @@ export default async function WordPage(props: PageProps<"/mot/[id]">) {
         <h2 className="text-xs font-bold uppercase tracking-[0.15em] text-zinc-400">
           tabadut
         </h2>
-        <p className="mt-3 border-l-4 border-brand-400 pl-4 text-lg leading-relaxed text-zinc-800">
+        <p className="mt-3 whitespace-pre-line border-l-4 border-brand-400 pl-4 text-lg leading-relaxed text-zinc-800">
           {entry.definition}
         </p>
       </section>

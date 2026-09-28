@@ -16,12 +16,6 @@ export type WordDTO = {
   createdAt?: Date;
 };
 
-export const ALPHABET = [
-  "A", "B", "C", "D", "Ḍ", "E", "F", "G", "Ǧ", "H", "Ḥ", "I", "J", "K",
-  "L", "M", "N", "Ɣ", "Q", "R", "Ṛ", "S", "Ṣ", "T", "Ṭ", "U", "W", "X",
-  "Y", "Z", "Ẓ", "Ɛ",
-];
-
 function escapeRegex(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -51,18 +45,29 @@ export async function searchWords(params: { q?: string; letter?: string }) {
   const letter = params.letter?.trim();
   const filter: Record<string, unknown> = {};
 
+  const letterMatch = letter
+    ? { word: new RegExp(`^${escapeRegex(letter)}`, "i") }
+    : null;
+
   if (q) {
     const rx = new RegExp(escapeRegex(q), "i");
-    filter.$or = [
-      { word: rx },
-      { definition: rx },
-      { syntax: rx },
-      { phonetic: rx },
-      { "translations.fr": rx },
-      { "translations.ar": rx },
-    ];
-  } else if (letter) {
-    filter.word = new RegExp(`^${escapeRegex(letter)}`, "i");
+    const textMatch = {
+      $or: [
+        { word: rx },
+        { definition: rx },
+        { syntax: rx },
+        { phonetic: rx },
+        { "translations.fr": rx },
+        { "translations.ar": rx },
+      ],
+    };
+    if (letterMatch) {
+      filter.$and = [letterMatch, textMatch];
+    } else {
+      filter.$or = textMatch.$or;
+    }
+  } else if (letterMatch) {
+    filter.word = letterMatch.word;
   }
 
   const docs = await Word.find(filter)

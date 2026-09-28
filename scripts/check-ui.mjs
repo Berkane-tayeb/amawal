@@ -23,7 +23,11 @@ page.on("console", (msg) => {
   if (expected404 && text.includes("404")) return;
   errors.push(text.slice(0, 3000));
 });
-page.on("pageerror", (err) => errors.push(`[pageerror] ${err.message}`));
+page.on("pageerror", (err) => {
+  // Bug d'instrumentation Next.js en dev uniquement (perf measure sur 404)
+  if (err.message.includes("cannot have a negative time stamp")) return;
+  errors.push(`[pageerror] ${err.message}`);
+});
 
 async function go(url) {
   await page.goto(`http://localhost:3000${url}`, { waitUntil: "networkidle" });

@@ -136,7 +136,7 @@ export default async function AdminPage() {
                           {entry.transcription}
                         </span>
                       )}
-                      <p className="mt-1.5 line-clamp-2 text-sm text-zinc-600">
+                      <p className="mt-1.5 line-clamp-2 whitespace-pre-line text-sm text-zinc-600">
                         {entry.definition}
                       </p>
                       {entry.translations.fr && (
