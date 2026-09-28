@@ -128,26 +128,19 @@ export function SearchBar({ q, letter }: Props) {
       </form>
 
       <nav className="mt-6 flex flex-wrap gap-1.5">
-        {ALPHABET.map((char) => {
-          const active = value.toUpperCase().includes(char.toUpperCase());
-          return (
-            <Link
-              key={char}
-              href={`/?letter=${encodeURIComponent(char)}`}
-              onClick={(event) => {
-                event.preventDefault();
-                appendLetter(char);
-              }}
-              className={
-                active
-                  ? "flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-b from-brand-500 to-brand-600 font-bold text-white shadow-md shadow-brand-600/30"
-                  : "flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 bg-white/80 font-semibold text-zinc-600 transition hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700"
-              }
-            >
-              {char}
-            </Link>
-          );
-        })}
+        {ALPHABET.map((char) => (
+          <Link
+            key={char}
+            href={`/?letter=${encodeURIComponent(char)}`}
+            onClick={(event) => {
+              event.preventDefault();
+              appendLetter(char);
+            }}
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 bg-white/80 font-semibold text-zinc-600 transition hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700"
+          >
+            {char}
+          </Link>
+        ))}
         {value && (
           <Link
             href="/"

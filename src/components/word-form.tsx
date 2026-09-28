@@ -61,7 +61,7 @@ export function WordForm({ mode, wordId, initial }: Props) {
 
           <div>
             <label htmlFor="transcription" className="label">
-              Transcription (tifinagh)
+              Tifinagh
             </label>
             <input
               id="transcription"
@@ -182,7 +182,7 @@ export function WordForm({ mode, wordId, initial }: Props) {
         <SectionTitle>amedya</SectionTitle>
         <div>
           <label htmlFor="examples" className="label">
-            Un amedya par ligne
+            amedya
           </label>
           <textarea
             id="examples"

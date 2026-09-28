@@ -51,20 +51,11 @@ export async function searchWords(params: { q?: string; letter?: string }) {
 
   if (q) {
     const rx = new RegExp(escapeRegex(q), "i");
-    const textMatch = {
-      $or: [
-        { word: rx },
-        { definition: rx },
-        { syntax: rx },
-        { phonetic: rx },
-        { "translations.fr": rx },
-        { "translations.ar": rx },
-      ],
-    };
+    const textMatch = { word: rx };
     if (letterMatch) {
       filter.$and = [letterMatch, textMatch];
     } else {
-      filter.$or = textMatch.$or;
+      filter.word = rx;
     }
   } else if (letterMatch) {
     filter.word = letterMatch.word;
